@@ -246,6 +246,27 @@ Doc.prototype = createObj(BranchChunk.prototype, {
     })
   }),
 
+  setInlineWidget: docMethodOp(function(line, widgetId, value) {
+    return changeLine(this, line, "inlineWidget", line => {
+      let widgets = line.inlineWidgets || (line.inlineWidgets = {})
+      widgets[widgetId] = value
+      if (!value && isEmpty(widgets)) line.inlineWidgets = null
+      return true
+    })
+  }),
+
+  clearInlineWidget: docMethodOp(function(widgetId) {
+    this.iter(line => {
+      if (line.inlineWidgets && line.inlineWidgets[widgetId]) {
+        changeLine(this, line, "inlineWidget", () => {
+          line.inlineWidgets[widgetId] = null
+          if (isEmpty(line.inlineWidgets)) line.inlineWidgets = null
+          return true
+        })
+      }
+    })
+  }),
+
   lineInfo: function(line) {
     let n
     if (typeof line == "number") {
@@ -258,6 +279,7 @@ Doc.prototype = createObj(BranchChunk.prototype, {
       if (n == null) return null
     }
     return {line: n, handle: line, text: line.text, gutterMarkers: line.gutterMarkers,
+            inlineWidgets: line.inlineWidgets,
             textClass: line.textClass, bgClass: line.bgClass, wrapClass: line.wrapClass,
             widgets: line.widgets}
   },

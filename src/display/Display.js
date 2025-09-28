@@ -2,6 +2,7 @@ import { gecko, ie, ie_version, mobile, webkit, chrome, chrome_version } from ".
 import { elt, eltP } from "../util/dom.js"
 import { scrollerGap } from "../util/misc.js"
 import { getGutters, renderGutters } from "./gutters.js"
+import { getInlineWidgetSpecs, renderInlineWidgets } from "./inline_widgets.js"
 
 // The display handles the DOM integration, both for input reading
 // and content drawing. It holds references to DOM nodes and
@@ -43,6 +44,10 @@ export function Display(place, doc, input, options) {
   // Will contain the gutters, if any.
   d.gutters = elt("div", null, "CodeMirror-gutters")
   d.lineGutter = null
+
+  d.inlineWidgets = elt("div", null, "CodeMirror-inlineWidgets")
+  d.lineInlineWidget = null
+
   // Actual scrollable element.
   d.scroller = elt("div", [d.sizer, d.heightForcer, d.gutters], "CodeMirror-scroll")
   d.scroller.setAttribute("tabIndex", "-1")
@@ -111,6 +116,8 @@ export function Display(place, doc, input, options) {
 
   d.gutterSpecs = getGutters(options.gutters, options.lineNumbers)
   renderGutters(d)
+  d.inlineWidgetSpecs = getInlineWidgetSpecs(options.inlineWidgets)
+  renderInlineWidgets(d)
 
   input.init(d)
 }

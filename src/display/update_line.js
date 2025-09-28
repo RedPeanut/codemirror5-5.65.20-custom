@@ -12,6 +12,7 @@ export function updateLineForChanges(cm, lineView, lineN, dims) {
     let type = lineView.changes[j]
     if (type == "text") updateLineText(cm, lineView)
     else if (type == "gutter") updateLineGutter(cm, lineView, lineN, dims)
+    else if (type == "inlineWidget") updateLineInlineWidget(cm, lineView, dims)
     else if (type == "class") updateLineClasses(cm, lineView)
     else if (type == "widget") updateLineWidgets(cm, lineView, dims)
   }
@@ -123,6 +124,50 @@ function updateLineGutter(cm, lineView, lineN, dims) {
   }
 }
 
+function updateLineInlineWidget(cm, lineView, dims) {
+
+  // console.log('updateLineInlineBtn() is called..')
+  // return
+
+  if (lineView.inlineWidget) {
+    lineView.node.removeChild(lineView.inlineWidget)
+    lineView.inlineWidget = null
+  }
+  /* if (lineView.line.inlineWidgetClass) {
+    let wrap = ensureLineWrapped(lineView)
+    lineView.inlineWidgetBackground = elt("div", null, "CodeMirror-inlineWidget-background " + lineView.line.inlineWidgetClass,
+        `right: 0; width: ${dims.inlineWidgetTotalWidth}px`)
+    cm.display.input.setUneditable(lineView.inlineWidgetBackground)
+    wrap.insertBefore(lineView.inlineWidgetBackground, lineView.text)
+  } */
+  let inlineWidgets = lineView.line.inlineWidgets
+  if (/* cm.options.lineNumbers ||  */inlineWidgets) {
+    let wrap = ensureLineWrapped(lineView)
+    let inlineWidgetWrap = lineView.inlineWidget = elt("div", null, "CodeMirror-inlineWidget-wrapper", ``)
+    // inlineBtnWrap.setAttribute("aria-hidden", "true")
+    // cm.display.input.setUneditable(inlineBtnWrap)
+    wrap.insertBefore(inlineWidgetWrap, lineView.text)
+    if (lineView.line.inlineWidgetClass)
+      inlineWidgetWrap.className += " " + lineView.line.inlineWidgetClass
+    /* if (cm.options.lineNumbers && (!inlineWidgets || !inlineWidgets["CodeMirror-linenumbers"]))
+      lineView.lineNumber = inlineWidgetWrap.appendChild(
+        elt("div", lineNumberFor(cm.options, lineN),
+            "CodeMirror-linenumber CodeMirror-inlineWidget-elt",
+            `left: ${dims.inlineWidgetLeft["CodeMirror-linenumbers"]}px; width: ${cm.display.lineNumInnerWidth}px`)) */
+    if (inlineWidgets) {
+      for (let k = 0; k < cm.display.inlineWidgetSpecs.length; ++k) {
+        let id = cm.display.inlineWidgetSpecs[k].className, found = inlineWidgets.hasOwnProperty(id) && inlineWidgets[id]
+        if (found) {
+          console.log('found!!');
+          inlineWidgetWrap.appendChild(elt("div", [found], "CodeMirror-inlineWidget-elt",
+            ``// `left: ${dims.inlineWidgetLeft[id]}px; width: ${dims.inlineWidgetWidth[id]}px`
+          ))
+        }
+      }
+    }
+  }
+}
+
 function updateLineWidgets(cm, lineView, dims) {
   if (lineView.alignable) lineView.alignable = null
   let isWidget = classTest("CodeMirror-linewidget")
@@ -142,6 +187,7 @@ export function buildLineElement(cm, lineView, lineN, dims) {
 
   updateLineClasses(cm, lineView)
   updateLineGutter(cm, lineView, lineN, dims)
+  updateLineInlineWidget(cm, lineView, dims)
   insertLineWidgets(cm, lineView, dims)
   return lineView.node
 }

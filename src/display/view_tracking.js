@@ -74,7 +74,7 @@ export function regChange(cm, from, to, lendiff) {
 }
 
 // Register a change to a single line. Type must be one of "text",
-// "gutter", "class", "widget"
+// "gutter", "inlineWidget", "class", "widget"
 export function regLineChange(cm, line, type) {
   cm.curOp.viewChanged = true
   let display = cm.display, ext = cm.display.externalMeasured

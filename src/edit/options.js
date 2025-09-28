@@ -1,5 +1,6 @@
 import { onBlur } from "../display/focus.js"
 import { getGutters, updateGutters } from "../display/gutters.js"
+import { getInlineWidgetSpecs, updateInlineWidgets } from "../display/inline_widgets.js"
 import { loadMode, resetModeState } from "../display/mode_state.js"
 import { initScrollbars, updateScrollbars } from "../display/scrollbars.js"
 import { updateSelection } from "../display/selection.js"
@@ -100,6 +101,10 @@ export function defineOptions(CodeMirror) {
   option("gutters", [], (cm, val) => {
     cm.display.gutterSpecs = getGutters(val, cm.options.lineNumbers)
     updateGutters(cm)
+  }, true)
+  option("inlineWidgets", [], (cm, val) => {
+    cm.display.inlineWidgetSpecs = getInlineWidgetSpecs(val)
+    updateInlinewidgets(cm)
   }, true)
   option("fixedGutter", true, (cm, val) => {
     cm.display.gutters.style.left = val ? compensateForHScroll(cm.display) + "px" : "0"
