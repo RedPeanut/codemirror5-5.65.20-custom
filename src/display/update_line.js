@@ -78,7 +78,7 @@ function updateLineText(cm, lineView) {
 function updateLineClasses(cm, lineView) {
   updateLineBackground(cm, lineView)
   if (lineView.line.wrapClass)
-    ensureLineWrapped(lineView).className = lineView.line.wrapClass
+    ensureLineWrapped(lineView).className = "wrapper " + lineView.line.wrapClass
   else if (lineView.node != lineView.text)
     lineView.node.className = ""
   let textClass = lineView.textClass ? lineView.textClass + " " + (lineView.line.textClass || "") : lineView.line.textClass
@@ -158,7 +158,7 @@ function updateLineInlineWidget(cm, lineView, dims) {
       for (let k = 0; k < cm.display.inlineWidgetSpecs.length; ++k) {
         let id = cm.display.inlineWidgetSpecs[k].className, found = inlineWidgets.hasOwnProperty(id) && inlineWidgets[id]
         if (found) {
-          console.log('found!!');
+          // console.log('found!!');
           inlineWidgetWrap.appendChild(elt("div", [found], "CodeMirror-inlineWidget-elt",
             ``// `left: ${dims.inlineWidgetLeft[id]}px; width: ${dims.inlineWidgetWidth[id]}px`
           ))
