@@ -5,7 +5,7 @@ import { elt } from "../util/dom.js"
 import { signalDOMEvent } from "../util/event.js"
 
 import { startWorker } from "./highlight_worker.js"
-import { alignHorizontally } from "./line_numbers.js"
+import { alignHorizontally, alignInlineWidgetLeft } from "./line_numbers.js"
 import { updateDisplaySimple } from "./update_display.js"
 
 // SCROLLING THINGS INTO VIEW
@@ -181,6 +181,7 @@ export function setScrollLeft(cm, val, isScroller, forceScroll) {
   if ((isScroller ? val == cm.doc.scrollLeft : Math.abs(cm.doc.scrollLeft - val) < 2) && !forceScroll) return
   cm.doc.scrollLeft = val
   alignHorizontally(cm)
+  alignInlineWidgetLeft(cm)
   if (cm.display.scroller.scrollLeft != val) cm.display.scroller.scrollLeft = val
   cm.display.scrollbars.setScrollLeft(val)
 }

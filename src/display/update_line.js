@@ -126,7 +126,7 @@ function updateLineGutter(cm, lineView, lineN, dims) {
 
 function updateLineInlineWidget(cm, lineView, dims) {
 
-  // console.log('updateLineInlineBtn() is called..')
+  // console.log('updateLineInlineWidget() is called..')
   // return
 
   if (lineView.inlineWidget) {
@@ -146,6 +146,9 @@ function updateLineInlineWidget(cm, lineView, dims) {
     let inlineWidgetWrap = lineView.inlineWidget = elt("div", null, "CodeMirror-inlineWidget-wrapper", ``)
     // inlineBtnWrap.setAttribute("aria-hidden", "true")
     // cm.display.input.setUneditable(inlineBtnWrap)
+    inlineWidgetWrap.style.width = cm.display.wrapper.clientWidth - 30 + "px"
+    // inlineWidgetWrap.style.left = '0';
+
     wrap.insertBefore(inlineWidgetWrap, lineView.text)
     if (lineView.line.inlineWidgetClass)
       inlineWidgetWrap.className += " " + lineView.line.inlineWidgetClass

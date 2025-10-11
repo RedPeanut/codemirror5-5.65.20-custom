@@ -26,6 +26,15 @@ export function alignHorizontally(cm) {
     display.gutters.style.left = (comp + gutterW) + "px"
 }
 
+export function alignInlineWidgetLeft(cm) {
+  let display = cm.display, view = display.view
+  let comp = cm.doc.scrollLeft
+  for (let i = 0; i < view.length; i++) {
+    if(view[i].inlineWidget)
+      view[i].inlineWidget.style.left = comp + "px"
+  }
+}
+
 // Used to ensure that the line number gutter is still the right
 // size for the current document size. Returns true when an update
 // is needed.
