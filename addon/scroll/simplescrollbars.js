@@ -110,7 +110,7 @@
     var width = this.width || 0;
 
     var needsH = measure.scrollWidth > measure.clientWidth + 1;
-    var needsV = measure.scrollHeight > measure.clientHeight + 1;
+    var needsV = false; // measure.scrollHeight > measure.clientHeight + 1;
     this.vert.node.style.display = needsV ? "block" : "none";
     this.horiz.node.style.display = needsH ? "block" : "none";
 
